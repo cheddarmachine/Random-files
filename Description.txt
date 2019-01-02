@@ -1,0 +1,697 @@
+
+	Here's a summary of Java syntax. I'm assuming you already know what stuff means,
+	but Google is your friend if not.
+		
+		TYPE NAME;				int idNumber;			This creates a variable.
+		
+		TYPE NAME = VALUE;  	int idNumber = 176;		This creates and initializes.
+														Prefer this form.
+													
+		NAME(ARG1, ARG2);		average(32, x + 1);		This calls a function or method.
+														Arguments are given in ( ).
+														
+		return VALUE;			return (x + y) / 2;		This specifies the result of
+														a function or method.
+														
+		if (COND) {				if (score < 5000) {		Run the code in { }
+			CODE					player.lose();		only if COND evaluates to true.
+		}							computer.win();
+								}
+
+		else if (COND) {		else if (tieGame) {		Run the code in { }
+			CODE					signalTie();		only if COND evaluates to true,
+		}						}						and the "if" or "else if" 
+														immediately before this
+														did NOT run.
+
+		else {					else {					Run the code in { }
+			CODE					player.win();		only when the "if" or "else if" 
+		}							computer.lose();	immediately before this
+								}						did NOT run.
+								
+		while (COND) {			while (i > 0) {			If COND evaluates to true,
+			CODE					sum += i;			run the code in {},
+		}							i--;				then go back and check COND again.
+								}						Repeat until COND evaluates to false.
+								
+		for (A; B; C) {			for (int i = 0; i < 10; i++) {		Shorthand for a while.
+			CODE					System.out.println(i);			See below.
+		}						}
+		
+				This really means:	A;				int i = 0;
+									while (B) {		while (i < 10) {
+										CODE			CODE;
+										C;				i++;
+									}				}
+									
+		break;					break;					This immediately stops any loop
+														and continues after the close-brace "}".
+														
+		continue;				continue;				This immediately stops THIS CYCLE through
+														the loop and goes back to the COND check.
+														If the COND is true, the loop resumes.
+									
+		new TYPE(PARAMS)		new Scanner(System.in)	This creates an object of a class type.
+														More about classes below.
+														
+		(TYPE) (VALUE)			(int)(4.5 + 5.6)		This casts (converts) a value of one type
+														to the TYPE listed in parens.
+		
+		
+	Here's a summary of Java primitive types.
+	
+	A "literal" is how you specify a value of that type without SAYING the type's name.
+	So if I just type in 123, that's implicitly - automatically - an int.
+	Every value has a type like this, even if it's not explicitly stated.
+	
+		Type		Storage		Range					Literals
+			
+		byte		1 byte		-2^7 to 2^7 - 1			(byte) 45
+		short		2 bytes		-2^15 to 2^15 - 1		(short) 4567
+		int			4 bytes		-2^31 to 2^31 - 1		4567
+		long		8 bytes		-2^63 to 2^63 - 1		4567l  4567L
+		
+		float		4 bytes		about 6 sig figs		5.05f  5.05F
+		double		8 bytes		about 12 sig figs		5.05
+		
+		char		2 bytes		0 to 2^16 - 1			'x' '3' '\uf31a'
+		boolean		1 byte		true or false			true false
+		
+	You can also have a reference that refers to an object, which we'll discuss below.
+	I'm including this because under the hood, references are just a type of number.
+	If you're running a 32-bit app, they're 4 bytes; in 64-bit, they're 8.
+		
+		reference	4 or 8 bytes						null   new Object()
+
+
+
+	If I do math on numerical types, the result will have the same type.
+	If the two types differ, say, if we have
+	
+		T1 + T2		45 + 760.45		(int + double)
+		
+	Then the type on the LEFT in this list:
+	
+		byte	short	int		long	float	double
+		
+	is converted to the other type. That'll be the type of the result.
+	
+		45 + 760.45 ==> 45.0 + 760.45  ==> 805.45 
+		int  double    double  double      double
+		
+	Remember that list. It's important.
+	
+	
+	
+		
+	Assigning a numerical type on the RIGHT above 
+		... into a variable of a type on the LEFT above
+		...	is illegal.
+			
+	If I say
+		double p = 4
+	that's fine, because we're taking 4 (an int) and putting it into p (a double).
+	
+	But if I say
+		int q = 4.56
+	that's illegal, because we're taking 4.56 (a double - on the RIGHT) and putting
+	it into q (an int - on the LEFT).
+	
+	We have to cast:
+		int q = (int)(4.56)
+	and that's okay.
+	
+	
+	
+	It's important that you understand what a function is.
+	In Java, functions are often called "methods".
+	
+	A function is a magical box that takes in 0 or more PARAMETERS
+		and results in 0 or 1 RETURN VALUES.
+		
+	Let's say there's a function called "average".
+	It takes in two arguments - both doubles - and gives out one double result.
+	
+	
+	
+	Here's how that looks:
+	
+		(a double)	 /-----------------\
+	  x	----> ----> -=                 |
+					 |     average     =- ----> ----> some double
+	  y	----> ----> -=				   |
+		(a double)	 \-----------------/
+		
+		
+		
+	And in code:
+	
+		public static RETURNTYPE NAME(PARAM1, PARAM2, ...) {
+			CODE
+		}
+	
+		public static double average(double x, double y) {
+			double result = (x + y) / 2;
+			return result;
+		}
+	
+	You could also just say
+	
+		public static double average(double x, double y) {
+			return (x + y) / 2;
+		}
+		
+	but it's up to you which you prefer.
+	
+	
+	
+	
+	
+	
+	
+	A class describes a type of data and the operations that can be performed on it.
+	An object is one particular instance of a class.
+	
+	For example, Human is a class, but James is an object of type Human.
+	There is one Human class. There are 7-odd-billion Human objects.
+	
+	A class contains:
+		1. Methods (functions) -- code that acts on an object, takes parameters, and gives a result
+		2. Members (data)      -- information of some kind
+		
+	Every object of a class has the same exact methods.
+	Every object of a class has the same exact members.
+	... but the values of these members might be different!
+	
+	For instance, the Point class might have members x and y.
+	So every Point object has an x and a y.
+	But the values of x and y will vary from Point to Point.
+	If there are 100 Points, there are 100 different x's and y's.
+	If you wanted to add a z, though, you'd have to make a different class.
+	
+	So what can we do with a class?
+		1. Create it:         Type x = new Type()
+		2. Modify its data:   x.thing = 42;
+		3. Call methods:      x.doSomething(y);
+	
+	The "dot" notation is used to dig into the methods and members that are inside an object.
+	
+	If Point p has x = 3 and y = 4, then
+		p.x is 3
+		p.y is 4
+	and I can say things like
+		p.x = 7
+	which will of course change p to (7, 4).
+	
+	The story of writing code in Java is the story of breaking your problem into classes.
+	
+	If you want to create a program that represents an online store, you might make classes:
+		Store
+		Customer
+		Vendor
+		Item
+		PurchaseOrder
+		ShippingConfirmation
+		WebServer
+		MailingList
+	and so on.
+	
+	If you were making a graphic user interface for a video game:
+		Label
+		TextBox
+		Button
+		Image
+		ProgressBar
+		Window
+		ScrollBar
+		TabPanel
+		Cursor
+	and so on.
+
+	I'll repeat the point.
+	
+	~~~ The story of writing code in Java is the story of breaking your problem into classes. ~~~
+	
+	There is a great degree of nuance and complexity to this skill, but with practice,
+	it will come very naturally.
+	
+	
+	
+	
+	Now we're going to work on a simple project that will show you how classes work in practice.
+	This project is going to be a program that creates mazes and outputs them to the text console.
+	
+	So what kind of maze is this?
+	Imagine you have a sheet of graph paper and you draw a box that surrounds an R by C rectangle.
+		(R rows, C columns.)
+	You then mark a start and an end square within that box.
+	All of the walls will then sit on the gridlines. (So they're line segments.)
+	That's the kind of maze we'll build.
+	
+	It'll look like this:
+	
+		+--+--+--+--+--+
+		|ST|        |EN|    (Start at ST, end at EN)
+		+  +  +--+  +  +
+		|     |     |  |
+		+--+  +--+--+  +
+		|     |     |  |
+		+  +--+  +  +  +
+		|        |     |
+		+--+--+--+--+--+
+	
+	
+	
+	So what kind of objects do we need?
+	Let's start from the ground up.
+	
+	
+	Cell
+		A cell is a single square in the maze.
+		
+			  +--+
+			  |  |
+			  +--+
+		
+		It has four potential walls: up, down, left, and right.
+		Each may be open or closed.
+	
+	Position
+		A position has a row and column, both integers.
+		They start counting at 0.
+		
+			(3, 1)    row 3, column 1
+			
+		This is used to refer to a particular location in the maze.
+	
+	Board
+		A board is a matrix of cells.
+		It has a number of rows and a number of columns.
+		It also contains many cells arranged into a two-dimensional array.
+		It also contains a start and end position.
+		It can print itself out to the screen as above.
+		
+		
+		
+	Let's design the DATA we'll need here - just the data.
+	This is always a good place to start.
+	
+	The members of your classes are the legs of your program.
+	Without well-designed members, your classes will be crippled.
+	So mind the data first.
+	 	
+	Here's how we might do it:
+	
+		class Cell {
+			boolean openUp;				All a Cell needs to know
+			boolean openDown;				is whether it has walls
+			boolean openLeft;				in the cardinal four directions.
+			boolean openRight;			These booleans are true if there is no wall.
+		}
+		
+		class Position {
+			int row;					All a Position needs to know
+			int column;						is its (row, col) location on the board.
+		}
+		
+		class Board {
+			Cell[][] cells;				A board needs a matrix [][] of Cells.
+			Position start;				It also needs a start and end.
+			Position end;
+		}
+		
+		
+		
+		
+	All classes must provide a means to create objects of that class.
+	This is called a constructor.
+	
+	A constructor is a method that you can call with the syntax
+		new ObjectType(argument, argument, ...)
+		
+	For instance, I'd like to be able to say
+	
+		new Cell();			... for a Cell that's closed on all sides		
+						
+				  up   down   left  right
+		new Cell(true, true, false, false);    ... for a Cell that's closed up and down		
+											       but open left and right
+											       
+		new Position(1, 2)		... for row 1, column 2
+		
+		new Board(10, 20)		... for a Board with 10 rows and 20 columns
+									and a default of the start in the upper-left
+									and an end in the bottom-right
+									
+									
+ 	Some wisdom.									
+		How can you use a thing you cannot create?
+		Can you paint without a canvas?
+	
+	Thus, think about your constructors after your data.
+		Think of:    data ==> constructors
+		
+		
+		
+	Let's add these to our classes.
+	How do we do that?
+	
+	The syntax is
+	
+		CLASSNAME(PARAMETERS) {
+			CODE
+		}
+		
+	You'll see:
+	
+		class Cell {
+			boolean openUp;
+			boolean openDown;
+			boolean openLeft;
+			boolean openRight;
+			
+			Cell() {
+				openUp = openDown = openLeft = openRight = false;
+			}
+			
+			Cell(boolean up, boolean down, boolean left, boolean right) {
+				openUp = up;
+				openDown = down;
+				openLeft = left;
+				openRight = right;
+			}
+		}
+		
+		class Position {
+			int row;
+			int column;
+			
+			Position(int r, int c) {
+				row = r;
+				column = c;
+			}
+		}
+		
+		class Board {
+			Cell[][] cells;
+			Position start;
+			Position end;
+			
+			Board(int rows, int cols) {
+				cells = new Cell[rows][cols];
+				start = new Position(0, 0);
+				end = new Position(rows - 1, cols - 1);
+			}
+		}
+	
+	
+	Very important here is this fact.
+		
+	In Java, if you are reading code in class NAME,
+		and NAME contains a data member ITEM,
+		any time the word "ITEM" occurs in code,
+		it's referring to the member.
+		
+	You do not have to do self.ITEM.
+	You just say ITEM.
+
+	Why do you think I used "r" and "c" below?
+	                                      |
+		class Position {				  |
+			int row;			/---------/
+			int column;			|
+								v
+			Position(int r, int c) {	
+				row = r;   
+				column = c;       
+			}					  
+		}
+	
+	If I had used "row" and "column" instead of "r" and "c",
+	how would I have referred to the class's members?
+	
+	Well, if I had...
+	
+		Position(int row, int cclumn) {	
+			row = row;   
+			column = column;       
+		}	
+		
+	this is absurd. It turns out that "row" and "column" in this case
+	are shadowing, or hiding, the class's members. You can no longer use
+	"row" and "column" to refer to the members. Instead, you're referring
+	to the function's arguments.
+	
+	This is an example of a more general principle.
+	
+		When you use a name inside a series of { },
+		look at the { } you're in to try to find it,
+		and then work outward from there.
+		The first time the name matches something,
+			THAT'S what it's referring to.
+			
+	For example, if I have
+	
+		int x = 4;
+		int y = 7;
+			
+		** --------------------------> x = 4, y = 7, z does not exist
+		
+		void someFunction(z) {
+			int x = 15;
+			
+			** ----------------------> x = 15, y = 7, z is the parameter
+														of someFunction
+			if (blah) {
+				int z = 8;
+				int y = 3;
+				
+				** ------------------> x = 15, y = 3, z is 8
+			}
+		}
+		
+		
+	
+	We can use a Python-ish syntax to FORCE Java to 
+	look at the class's members.  Instead of "self", use "this":
+	
+		Position(int row, int column) {
+			this.row = row;
+			this.column = column;
+		}
+	
+	In constructors, "this" is the preferred naming method of most coders.
+	Let me show you:
+	
+		class Cell {
+			boolean openUp;
+			boolean openDown;
+			boolean openLeft;
+			boolean openRight;
+			
+			...
+			
+			Cell(boolean openUp, boolean openDown, boolean openLeft, boolean openRight) {
+				this.openUp = openUp;
+				this.openDown = openDown;
+				this.openLeft = openLeft;
+				this.openRight = openRight;
+			}
+		}
+		
+		class Position {
+			int row;
+			int column;
+			
+			Position(int row, int column) {
+				this.row = row;
+				this.column = column;
+			}
+		}
+		
+		class Board {
+			...				(nothing changes)
+		}
+		
+		
+		
+		
+	Now we have each class's DATA and CONSTRUCTORS.
+		We must now consider how to add OBSERVERS and MUTATORS.
+	
+	
+	Observers tell you something about an object without modifying it.
+		Some people refer to these as "getters", but it's a limiting idea.
+	
+	Mutators modify an object and can sometimes tell you about it, too.
+		Some people refer to these as "setters", "accessors", etc.
+		Those are also rather limiting.
+	
+	Our design begins by asking a question:	
+	How would we like to be able to observe and mutate our data?
+	
+		For Cells:
+			(Observe) We'd like to be able to see whether a direction is open.
+			(Mutate)  We'd like to build or tear down walls.
+			
+		For Positions:
+			(Observe) We'd like to get our row and column.
+			(Mutate)  We'd like to set our row and column.
+			
+		For Boards:
+			(Observe) We'd like to get our size in rows and columns.
+			(Observe) We'd like to read individual cells from the board.
+			(Observe) We'd like to get our start and end positions.
+			(Observe) We'd like to print out the board to the screen.
+			
+			(Observe) We'd like to solve the board, producing a list of positions
+					  that take us from start to end, or conclude that the maze
+					  is not solvable.
+			
+			(Mutate)  We'd like to build or tear down a wall between two cells.
+					  This is important, because it modifies BOTH cells.
+					  Either cell can have a wall set, so both are changed.
+					  This is different from mutating a single cell!
+					  
+			(Mutate)  We'd like to set our start and end positions.
+			(Mutate)  We'd like to clear the board so that it's empty except for
+					  a border surrounding the maze.
+			(Mutate)  We'd like to fill the board so that every cell is walled off.
+			
+			(Mutate)  We'd like to modify the board so that it is SOLVABLE,
+					  but MAXIMALLY FILLED. What this means is that:
+					  	  if the maze is not solvable, remove random walls until it is;
+					  	  if the maze is solvable, add random walls until it isn't.
+					  This is how we'll build our mazes.
+					  We can put whatever design we want in, and then modify it until it's
+					  solvable - but barely solvable.
+	
+	
+	
+	Each observer or mutator becomes a function (or method, in Java).
+	There's something else important to mention here, though.
+		
+	
+	Typically, data should be marked "private".
+	Classes and methods should be marked "public".
+		(Helper functions and methods can be "private", though.)
+	
+	This means that nobody can touch the data after object creation
+		except for the object itself.
+	
+	You should strive to observe and mutate through methods, not by directly touching data.
+	
+			NOT SO GOOD									BETTER
+			
+		Position p = new Position(3, 1);			Position p = new Position(3, 1);
+		System.out.println(p.row);					System.out.println(p.getRow());
+		p.column = 5;								p.setColumn(5);
+		p.row += 1;									p.setRow(p.getRow() + 1);
+		
+		
+		
+	The syntax on the right is unwieldy, but you'll see soon why it's necessary.
+	
+	Imagine someone says
+		p.row = -3;
+	or
+		p.column = 10000000;
+			
+	What's going to happen when someone tries to read from that position?
+	It'll go off the end of the board and your program will crash with an
+		IndexOutOfBounds exception!
+		
+	What if p.setRow() and p.setColumn() just refuse to set invalid coordinates?
+	That'd just prevent the issue from arising entirely!
+	
+	There are other good reasons, too, but they're more subtle.
+	You'll have to trust me for now.
+	
+	
+	
+	Let's write the code.
+	
+	Remind yourself of the specification:
+	
+		For Positions:
+			(Observe) We'd like to get our row and column.
+			(Mutate)  We'd like to set our row and column.
+	
+			
+	Now, let's add access modifiers, observers, and mutators:
+	
+		public class Position {
+			private int row;
+			private int column;
+			
+			public Position(int row, int column) {
+				this.row = row;
+				this.column = column;
+			}
+			
+			public int getRow() {
+				return row;
+			}
+			
+			public int getColumn() {
+				return column;
+			}
+			
+			public void setRow(int row) {
+				if (row >= 0) {
+					this.row = row;
+				} else {
+					// this is an error...
+					// you could do something but let's just quietly set the position to 0
+					this.row = 0;
+				}
+			}
+			
+			public void setColumn(int column) {
+				if (column >= 0) {
+					this.column = column;
+				} else {
+					this.column = 0;
+				}
+			}
+		}
+	
+	And that's actually the finished class!
+	If you did the rest of them like this, the project would be complete and working.
+	
+	But before we do that...
+		The moral of the story is to keep your private parts private.
+		Don't just go making them public for no reason.
+		
+	
+	
+	I like to do all of my data at once for all the classes in my program,
+		then all the constructors,
+		then all the observers and mutators.
+		
+	So in the big picture, here's the flow for designing classes:
+	
+		data ==> constructors ==> observers and mutators ==> done
+		
+	This is a great way to make sure that all the parts fit together nicely.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+			
